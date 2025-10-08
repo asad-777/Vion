@@ -1,0 +1,4 @@
+server.py:3 - INFO - Server module initialized.
+server.py:5 - WARNING - warning module initialized.
+server.py:6 - ERROR - error module initialized.
+server.py:7 - CRITICAL - critical module initialized.
