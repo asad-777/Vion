@@ -1,18 +1,22 @@
-from config import CSV_FILE_PATH
-import pandas as pd #type:ignore
+from config import CSV_FILE_PATH,UPDATE_COUNTER
+from typing import Optional
 from logger import logger
+import pandas as pd #type:ignore
 from system_variable import load_data, save_data
 
 df = None
-link_count = load_data('link_counter')
+link_count = load_data()
 len_df = 0
 
 # read entire csv file
 def csv_read(path=CSV_FILE_PATH):
     global df
+    global len_df
     try:
         df = pd.read_csv(path)
         logger.info(f"CSV file read successfully from {path}")
+        if len_df == 0:
+            len_df = len(df)
         return df
     except FileNotFoundError:
         logger.error(f"Error: CSV file not found at path: {path}")
@@ -28,26 +32,26 @@ def csv_read(path=CSV_FILE_PATH):
         logger.error(f"An unexpected error occurred while reading the CSV file: {e}")
         return None
 
-
-def return_link():
+ 
+def return_link() -> Optional[str]:
     global df
     global link_count
     global len_df
     if df is None:
         df = csv_read()
     if df is not None and not df.empty:
-        if len_df == 0:
-            len_df = len(df)
+        
         if link_count < len_df:
             title = str(df.iloc[link_count,0]).strip()
             link = str(df.iloc[link_count,1]).strip()
             logger.info(f"Link returned: {link_count} with title {title}")
-            link_count += 1
-            save_data(link_count,'link_counter')
+            if UPDATE_COUNTER:
+                link_count += 1
+                save_data(link_count)
             return link
         else:
             logger.warning("Link count exceeds number of links in CSV.")
-            return None,None
+            return None
     else:
         logger.error("DataFrame is empty or None.")
-        return None,None
+        return None
