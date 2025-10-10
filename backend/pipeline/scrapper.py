@@ -50,7 +50,7 @@ def scrape_website() :
                 lower = text.lower()
                 if any(bad in lower for bad in banned_words):
                     continue
-                if len(text.split()) < 30:
+                if len(text.split()) < 50:
                     continue
                 sections[str(index)] = text
                 index += 1
@@ -82,26 +82,21 @@ def scrape_website() :
         #json_output = json.dumps(sections, ensure_ascii=False, indent=2)
         logger.info("Json returned")
         
-        unwanted_keywords = ["Author Contributions", "Acknowledgments"]
 
         if isinstance(sections, dict) and sections:
             return_text = []
 
             for key, text in sections.items():
-                text_lower = text.lower()
-
-                # Skip if section starts with <h3> or <p> inside <section>
-                # OR contains any unwanted keywords
                 if re.match(r"^<section\s*>\s*<(h3|p)>", text, re.IGNORECASE):
                     continue
-                if any(keyword in text_lower for keyword in unwanted_keywords):
-                    continue
-
-                # If it passes all filters, add to return_text
                 return_text.append(text)
 
             answer = "\n\n\n===============================================\n\n\n".join(return_text)
+            logger.info("Clean HTML returned")
             return answer
+
+        else:
+            return ("empty sections in processing")
     except requests.exceptions.RequestException as e:
         logger.warning(f"Error scraping {url}: {e}")
         return None
