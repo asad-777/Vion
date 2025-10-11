@@ -1,9 +1,35 @@
 import requests  # type: ignore
 from logger import logger
-from bs4 import BeautifulSoup  # type: ignore
+from bs4 import BeautifulSoup, NavigableString, Tag  # type: ignore
 from csv_handelling import return_link
 from bs4.element import Comment  # type: ignore
+import re
 
+
+
+def traverse(node):
+    """Recursively extract text in order, keeping headings and sub/sup."""
+    result = []
+    if isinstance(node, NavigableString):
+        text = node.strip()
+        if text:
+            result.append(text)
+    elif isinstance(node, Tag):
+        if node.name in ['h2']:
+            text = node.get_text(strip=True)
+            if text:
+                result.append(f"\n# {text}\n")
+        elif node.name in ['h3']:
+            text = node.get_text(strip=True)
+            if text:
+                result.append(f"\n### {text}\n")
+        elif node.name in ['sub', 'sup']:
+            result.append(str(node))
+        else:
+            for child in node.children:
+                result.extend(traverse(child))
+    combined = "".join(result)
+    return combined
 
 def scrape_website() :
     url = return_link()
@@ -39,7 +65,6 @@ def scrape_website() :
         logger.warning(f"Error scraping {url}: {e}")
         return None
         
-        
 def section_maker():        
         soup = scrape_website()
         if soup is not None:
@@ -53,19 +78,28 @@ def section_maker():
                         continue
                     if not text.startswith("<section><h2>"):
                         continue
-                    sections[str(index)] = text
+                    
+                    tags_to_remove = ['section', 'p', 'em', 'strong','span']
+                    pattern = r'</?(?:' + '|'.join(tags_to_remove) + r')>'
+                    clean_text = re.sub(pattern, '', text, flags=re.IGNORECASE)
+                    clean_text = re.sub(r'\s+', ' ', clean_text).strip()
+                    soup_traverse = BeautifulSoup(clean_text, "html.parser")
+                    clean_clean_text = traverse(soup_traverse)
+                    sections[str(index)] = clean_clean_text
                     index += 1
             return sections
         else:
-            return  
+            logger.warning("Nothing to make sections of")
+            return  None
 
 def final_data():
     data = section_maker()
     if not data:
+        logger.info("No data to return bad words from")
         return ""
 
     bad_words = [
-        "Acknowledgements", "References", "Authors' contributions",
+        "Acknowledgements","Acknowledgments", "References", "Authors' contributions",
         "Supplementary Material", "Associated Data","Funding"
     ]
 
@@ -76,6 +110,6 @@ def final_data():
     }
 
     logger.info("Removed Noise from recieved data and sent it for formatting")
-    return "\n\n\n======================\n\n\n".join(filtered.values())
+    return "\n\n".join(filtered.values())
 
 

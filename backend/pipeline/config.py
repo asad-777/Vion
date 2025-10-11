@@ -4,7 +4,7 @@ LOG_LEVEL = "INFO"
 LOG_FORMAT = '%(filename)s:%(lineno)d - %(levelname)s - %(message)s - %(asctime)s'
 LOGGER_NAME = "vion_pipeline"
 FILE_LOGGING_ENABLED = False
-CONSOLE_LOGGING_ENABLED = True
+CONSOLE_LOGGING_ENABLED = False
 
 
 # csv_handelling.py

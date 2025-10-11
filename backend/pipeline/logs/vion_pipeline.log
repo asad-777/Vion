@@ -1,0 +1,28 @@
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 13} - 2025-10-11 16:31:00,109
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:31:00,125
+csv_handelling.py:47 - INFO - Link returned: 13 with title Functional redundancy between trans-Golgi network SNARE family members in Arabidopsis thaliana. - 2025-10-11 16:31:00,126
+scrapper.py:111 - INFO - Removed Noise from recieved data and sent it for formatting - 2025-10-11 16:31:04,104
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 14} - 2025-10-11 16:32:06,012
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:32:06,026
+csv_handelling.py:47 - INFO - Link returned: 14 with title Root growth movements: Waving and skewing. - 2025-10-11 16:32:06,052
+scrapper.py:111 - INFO - Removed Noise from recieved data and sent it for formatting - 2025-10-11 16:32:10,421
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 15} - 2025-10-11 16:32:24,124
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:32:24,142
+csv_handelling.py:47 - INFO - Link returned: 15 with title Gravitropism and lateral root emergence are dependent on the trans-Golgi network protein TNO1 - 2025-10-11 16:32:24,143
+scrapper.py:111 - INFO - Removed Noise from recieved data and sent it for formatting - 2025-10-11 16:32:28,995
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 16} - 2025-10-11 16:34:21,619
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:34:21,636
+csv_handelling.py:47 - INFO - Link returned: 16 with title TNO1, a TGN-localized SNARE-interacting protein, modulates root skewing in Arabidopsis thaliana. - 2025-10-11 16:34:21,637
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 17} - 2025-10-11 16:35:15,036
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:35:15,059
+csv_handelling.py:47 - INFO - Link returned: 17 with title The Drosophila SUN protein Spag4 cooperates with the coiled-coil protein Yuri Gagarin to maintain association of the basal body and spermatid nucleus. - 2025-10-11 16:35:15,060
+scrapper.py:111 - INFO - Removed Noise from recieved data and sent it for formatting - 2025-10-11 16:35:19,137
+csv_handelling.py:47 - INFO - Link returned: 18 with title Toll mediated infection response is altered by gravity and spaceflight in Drosophila - 2025-10-11 16:35:24,140
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 19} - 2025-10-11 16:37:11,939
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:37:11,953
+csv_handelling.py:47 - INFO - Link returned: 19 with title Multi-omics analysis of multiple missions to space reveal a theme of lipid dysregulation in mouse liver - 2025-10-11 16:37:11,953
+csv_handelling.py:47 - INFO - Link returned: 19 with title Multi-omics analysis of multiple missions to space reveal a theme of lipid dysregulation in mouse liver - 2025-10-11 16:37:21,032
+csv_handelling.py:47 - INFO - Link returned: 19 with title Multi-omics analysis of multiple missions to space reveal a theme of lipid dysregulation in mouse liver - 2025-10-11 16:37:30,198
+system_variable.py:11 - INFO - counter loaded from data/persistence.json: {'counter': 19} - 2025-10-11 16:37:59,271
+csv_handelling.py:17 - INFO - CSV file read successfully from data/links.csv - 2025-10-11 16:37:59,289
+csv_handelling.py:47 - INFO - Link returned: 19 with title Multi-omics analysis of multiple missions to space reveal a theme of lipid dysregulation in mouse liver - 2025-10-11 16:37:59,290
