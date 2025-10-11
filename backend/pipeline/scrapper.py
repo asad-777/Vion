@@ -1,10 +1,8 @@
-import json
 import requests  # type: ignore
 from logger import logger
-from csv_handelling import return_link
 from bs4 import BeautifulSoup  # type: ignore
+from csv_handelling import return_link
 from bs4.element import Comment  # type: ignore
-import re
 
 
 def scrape_website() :
@@ -16,7 +14,7 @@ def scrape_website() :
         response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
-        for tag in soup([
+        for tag in soup.find_all([
             'script', 'style', 'noscript', 'iframe', 'link', 'img', 'picture', 'meta',
             'button', 'svg', 'form', 'header', 'footer', 'head', 'a','table','h4',
             'figure','h5','h6'
@@ -24,7 +22,7 @@ def scrape_website() :
             tag.decompose()
         for comment in soup.find_all(string=lambda text: isinstance(text, Comment)):
             comment.extract()
-        for _ in range(2):
+        for _ in range(3):
             for tag in soup.find_all(['div', 'section', 'span']):
                 if len(tag.contents) == 1 and getattr(tag.contents[0], 'name', None) in [
                     'div', 'section', 'span', 'p', 'ul', 'ol', 'li'
@@ -36,67 +34,48 @@ def scrape_website() :
             tag.attrs = {}
             if not tag.get_text(strip=True):
                 tag.decompose()
-        logger.info("HTML of returned data has been cleaned")
-        sections = {}
-        banned_words = ['permalink', 'resources', 'cite', 'collections', 'actions']
-        index = 1
-
-
-        for tag in soup.find_all(['section']):
-                #text = tag.get_text(separator=' ', strip=True)
-                text = str(tag)
-                if not text:
-                    continue
-                lower = text.lower()
-                if any(bad in lower for bad in banned_words):
-                    continue
-                if len(text.split()) < 50:
-                    continue
-                sections[str(index)] = text
-                index += 1
-
-
-        logger.info("json of returned data has been cleaned")
-
-
-
-        def trim_json_from_abstract(data: dict) -> dict:
-            start_index = None
-            for key, value in sorted(data.items(), key=lambda x: int(x[0])):
-                if isinstance(value, str):
-                    soup = BeautifulSoup(value, 'html.parser')
-                    text = soup.get_text(separator=' ', strip=True)
-                    if text.startswith("Abstract"):
-                        start_index = int(key)
-                        break
-            if start_index is None:
-                return {}
-            trimmed_items = [
-                (str(i + 1), data[str(j)]) 
-                for i, j in enumerate(range(start_index, len(data) + 1)) 
-                if str(j) in data
-            ]
-            return dict(trimmed_items)
-        sections = trim_json_from_abstract(sections)
-        logger.info("found abstract and structured the json")
-        #json_output = json.dumps(sections, ensure_ascii=False, indent=2)
-        logger.info("Json returned")
-        
-
-        if isinstance(sections, dict) and sections:
-            return_text = []
-
-            for key, text in sections.items():
-                if re.match(r"^<section\s*>\s*<(h3|p)>", text, re.IGNORECASE):
-                    continue
-                return_text.append(text)
-
-            answer = "\n\n\n===============================================\n\n\n".join(return_text)
-            logger.info("Clean HTML returned")
-            return answer
-
-        else:
-            return ("empty sections in processing")
+        return soup
     except requests.exceptions.RequestException as e:
         logger.warning(f"Error scraping {url}: {e}")
         return None
+        
+        
+def section_maker():        
+        soup = scrape_website()
+        if soup is not None:
+            sections = {}
+            index = 1
+            for tag in soup.find_all(['section']): 
+                    text = str(tag)
+                    if not text:
+                        continue
+                    if len(text.split()) < 50:
+                        continue
+                    if not text.startswith("<section><h2>"):
+                        continue
+                    sections[str(index)] = text
+                    index += 1
+            return sections
+        else:
+            return  
+
+def final_data():
+    data = section_maker()
+    if not data:
+        return ""
+
+    bad_words = [
+        "Acknowledgements", "References", "Authors' contributions",
+        "Supplementary Material", "Associated Data","Funding"
+    ]
+
+    filtered = {
+        k: v
+        for k, v in data.items()
+        if not any(bw.lower() in str(v).lower() for bw in bad_words)
+    }
+
+    logger.info("Removed Noise from recieved data and sent it for formatting")
+    return "\n\n\n======================\n\n\n".join(filtered.values())
+
+

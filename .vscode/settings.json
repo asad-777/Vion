@@ -4,5 +4,6 @@
         "levelname",
         "noscript",
         "vion"
-    ]
+    ],
+    "livePreview.defaultPreviewPath": "/backend/pipeline/output.html"
 }

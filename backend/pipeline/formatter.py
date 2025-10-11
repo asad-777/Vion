@@ -1,7 +1,8 @@
 from logger import logger
-from scrapper import scrape_website
+from scrapper import final_data
 from typing import Optional
+from bs4 import BeautifulSoup  # type: ignore
 
-def format_data() -> Optional[str]:
-    data = scrape_website()
+def format_data() :
+    data = final_data()
     return data

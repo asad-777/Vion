@@ -6,7 +6,7 @@ def main():
 
     data = format_data()
     data = str(data)
-    with open("output.html", "w", encoding="utf-8", errors="ignore") as txt_file:
+    with open("output.md", "w", encoding="utf-8", errors="ignore") as txt_file:
         txt_file.write(data)#type:ignore
     
     print("\nServer Stopped After Completing Task")
